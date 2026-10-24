@@ -1,0 +1,25 @@
+name: Extension CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run check
+      - run: npm test
+      - run: npm run compile
+      - run: npx vsce package --no-dependencies
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cli-agent-vscode-vsix
+          path: '*.vsix'
