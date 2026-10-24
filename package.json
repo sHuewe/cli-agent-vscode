@@ -1,0 +1,90 @@
+{
+  "name": "cli-agent-vscode",
+  "displayName": "cli-agent",
+  "description": "Local AG-UI chat client for cli-agent",
+  "version": "0.1.0",
+  "publisher": "shuewe",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onView:cliAgent.chat"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cliAgent",
+          "title": "cli-agent",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "cliAgent": [
+        {
+          "id": "cliAgent.chat",
+          "name": "Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "cliAgent.connect",
+        "title": "cli-agent: Connect to API"
+      },
+      {
+        "command": "cliAgent.newSession",
+        "title": "cli-agent: New Session"
+      },
+      {
+        "command": "cliAgent.addSelection",
+        "title": "cli-agent: Add Selection to Chat"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "cliAgent.addSelection",
+          "when": "editorHasSelection"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "cli-agent",
+      "properties": {
+        "cliAgent.apiUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8765",
+          "description": "Loopback URL for manually started cli-agent-api"
+        },
+        "cliAgent.allowInsecureRemote": {
+          "type": "boolean",
+          "default": false,
+          "description": "Unsupported; remote hosts are not accepted by this extension."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "check": "tsc --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "package": "npm run check && npm test && npm run compile && vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.96.0",
+    "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.0"
+  }
+}
